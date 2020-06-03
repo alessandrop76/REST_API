@@ -1,0 +1,123 @@
+CRIANDO API's COM PYTHON E FLASK
+
+>PYCHARM - NOVO PROJETO -<NOME_DO_PROJETO> ESCOLHER O INTERPRETADOR E O VENV
+
+>FILE + NOVO PROJETO + <NOME_DO_PROJETO>
+>CRIAR UM NOVO ARQUIVO PYTHON NO PROJETO - <nomeDoProjeto.py>
+>No arquivo criado, ir no Terminal e instalar o Flask
+-digitar
+>pip install Flask
+-rodar o projeto(botão direto-run app)
+>run (não vai acontecer nada)
+-na aba de rodar a aplicação "app" run
+clicar com o botão direito do mouse e selecionar
+Edit configurations
+-na opção Parameters: - digitar
+>runserver
+
+exemplo do arquivo <nomeDoArquivo.py>
+
+from flask import Flask 	#importando o Flask para o projeto
+
+app = Flask(__name__)   	#Flask recebe o aplicativo 'name'
+
+@app.route('/')         	#'Decoration' para determinar a rota
+def minha_api():		#método para retornar visualização	
+    return 'Olá'	
+
+if __name__ == '__main__':	# com esta definição só roda a partir desta função(na propria página)
+    app.run(debug=True)
+
+
+x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x
+
+-agora vamos utilizar um retorno com json
+
+from flask import Flask, jsonify
+
+app = Flask(__name__)
+
+@app.route('/')
+def pessoas():
+    return jsonify({'nome': 'Alê'})
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+////////////////////////////////////////////////////////
+-podemos também passar parametros para a função
+exemplo uma função que soma:
+
+
+@app.route('/soma/<int:valor1>/<int:valor2>/<int:valor3>')
+def soma (valor1, valor2, valor3):
+    return jsonify({'soma':valor1 + valor2 + valor3})
+
+> no URI
+http://127.0.0.1:5000/soma/20/30/100
+
+> no HTML
+{
+  "soma": 150
+}
+
+
+//////////////////////////////////////////////////////////////
+passando os dados através do json metodo 'POST'
+exemplo:
+
+from flask import Flask, jsonify, request      #importar a biblioteca 'request'
+
+
+@app.route('/soma', methods=['POST'])
+def soma ():
+    dados = json.loads(request.data)		#utilizando o JSON para retornar os dados de uma origem json
+    total = sum(dados["valores"])
+    return jsonify({'soma':total}) 		#retornando 'total' que fez a soma dos itens do array pelo comando SUM
+
+
+>no programa POSTMAN passar a URI e informar os paramentros do JSON
+(Body/Raw/Json)
+
+{"valores":[10,10,10,40,80,10,20,20]} #lista json - variavel 'valores' com array contendo os valores
+
+
+>retorno na tela do POSTMAN do JSON já efetuando a soma dos valores, através da função '/soma'
+{
+  "soma": 200
+}
+
+
+/////////////////////////////////////////////////////////////
+Aqui definimos um IF pra saber se a forma de envio é GET ou POST
+
+@app.route('/soma', methods=['POST', 'GET'])
+def soma ():
+    if request.method == 'POST':
+        dados = json.loads(request.data)   #utilizando o JSON para retornar os dados de uma origem json
+        total = sum(dados["valores"])
+    elif request.method == 'GET':
+        total = 10+10
+    return jsonify({'soma':total})  #retornando 'total' que fez a soma dos itens do array pelo comando SUM
+
+-Se for POST vai retornar o valor da variável 'total' com os parametros do JSON
+-Se for GET vai rotornar o valor da variável 'total'
+
+//////////////////////////////////////////////////////////////
+No TERMINAL agora digitar
+
+>pip install request      		#- não é a mesma biblioteca do 'request do Flask'
+
+ele vai instalar os pacotes:
+Installing collected packages: public, query-string, get, post, request
+    Running setup.py install for public ... done
+    Running setup.py install for query-string ... done
+    Running setup.py install for get ... done
+    Running setup.py install for post ... done
+    Running setup.py install for request ... done
+Successfully installed get-2019.4.13 post-2019.4.13 public-2019.4.13 query-string-2019.4.13 request-2019.4.13
+
+
+
+
+
